@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  robot-health-monitor:
+    image: health-monitor:1.0
+    container_name: health_monitor
+    restart: unless-stopped
+
+    volumes:
+      - ./logs:/app/logs
+
+    environment:
+      - TZ=Asia/Kolkata
+
+    command: python main.py
