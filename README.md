@@ -1,99 +1,198 @@
-📊 Application Health Monitoring Service
+# Health Monitor
 
-A containerized application health monitoring service that continuously tracks system resource usage (CPU, memory, disk), logs metrics, and runs reliably as a background service using Docker and Docker Compose.
+A comprehensive health monitoring system for robotic applications that tracks system resources, sensor status, and provides automated maintenance capabilities.
 
-This project demonstrates Linux system monitoring, Python automation, logging best practices, and containerized deployment.
+## Features
 
-🚀 Features
+### System Monitoring
 
-📈 CPU Usage Monitoring
+- **CPU Monitoring**: Tracks CPU usage with configurable thresholds and alerts
+- **Memory Monitoring**: Monitors RAM usage and detects memory pressure
+- **Disk Monitoring**: Monitors disk space and I/O operations
+- **Network Monitoring**: Tracks network interface statistics and connectivity
 
-🧠 Memory Usage Monitoring
+### Sensor Simulation
 
-💾 Disk Usage Monitoring
+- **Camera Simulator**: Simulates camera sensor operations and health checks
+- **GPS Simulator**: Simulates GPS positioning and signal quality monitoring
 
-📝 Structured logging with log rotation
+### Automated Maintenance
 
-🔁 Automatic restart on failure (Docker restart policy)
+- **Log Cleanup**: Automated log rotation and cleanup utilities
+- **Service Restart**: Automated service restart capabilities for fault recovery
 
-📦 Fully containerized using Docker
+### Logging & Configuration
 
-📄 Single YAML-based deployment using Docker Compose
+- Centralized logging configuration with rotating file handlers
+- Structured logging with different log levels and categories
+- Configurable monitoring thresholds and intervals
 
-📂 Persistent logs stored on host system
+## Project Structure
 
-🛠️ Tech Stack
+```
+health-monitor/
+├── main.py                 # Main application entry point
+├── logger_config.py        # Logging configuration
+├── requirements.txt        # Python dependencies
+├── Dockerfile             # Docker container configuration
+├── docker-compose.yml     # Docker Compose deployment
+├── monitor/               # System monitoring modules
+│   ├── cpu_monitor.py
+│   ├── memory_monitor.py
+│   ├── disk_monitor.py
+│   └── network_monitor.py
+├── sensors/               # Sensor simulation modules
+│   ├── camera_simulator.py
+│   └── gps_simulator.py
+├── auto_fix/              # Automated maintenance scripts
+│   ├── cleanup_log.py
+│   ├── cleanup_logs
+│   └── restart_service.py
+└── logs/                  # Application logs directory
+```
 
-Python 3
+## Installation
 
-psutil – system metrics
+### Prerequisites
 
-Docker
+- Python 3.8 or higher
+- Docker and Docker Compose (for containerized deployment)
 
-Docker Compose
+### Local Installation
 
-Linux
+1. Clone the repository:
 
-📂 Project Structure robot-health-monitor/ ├── monitor/ │ ├── cpu_monitor.py │ ├── memory_monitor.py │ └── disk_monitor.py ├── auto_fix/ │ └── cleanup_logs.py ├── logs/ ├── logger_config.py ├── main.py ├── Dockerfile ├── docker-compose.yml ├── requirements.txt └── README.md
+```bash
+git clone https://github.com/DipendraChandel/Application-Health-Monitoring.git
+cd Application-Health-Monitoring
+```
 
-⚙️ How It Works
+2. Create a virtual environment:
 
-Each monitor runs continuously in its own thread
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-Resource usage is logged at fixed intervals
+3. Install dependencies:
 
-Logs are rotated automatically to prevent disk exhaustion
+```bash
+pip install -r requirements.txt
+```
 
-The service runs as a container with restart policies for reliability
+## Usage
 
-Logs are mounted as volumes so they persist across restarts
+### Running Locally
 
-▶️ Running the Application 1️⃣ Build Docker Image docker build -t app-health-monitor:1.0 .
+Start the health monitoring system:
 
-2️⃣ Start Service Using Docker Compose docker-compose up -d
+```bash
+python main.py
+```
 
-3️⃣ Verify docker ps ls logs
+The application will start monitoring system resources and log to the `logs/` directory.
 
-You should see log files like:
+### Docker Deployment
 
-cpu.log memory.log disk.log auto_fix.log
+1. Build the Docker image:
 
-4️⃣ Stop Service docker-compose down
+```bash
+docker-compose build
+```
 
-Logs will remain available on the host system.
+2. Start the service:
 
-📝 Logging Strategy
+```bash
+docker-compose up -d
+```
 
-Uses rotating log files
+3. View logs:
 
-Prevents uncontrolled log growth
+```bash
+docker-compose logs -f
+```
 
-Logs are separated by concern (CPU, memory, disk, auto-fix)
+4. Stop the service:
 
-Logs persist even if the container restarts
+```bash
+docker-compose down
+```
 
-🎯 Use Cases
+## Configuration
 
-Application health monitoring
+### Monitoring Thresholds
 
-Linux system monitoring
+Modify the threshold values in the respective monitor files:
 
-Learning Docker + Python automation
+- `CPU_THRESHOLD` in `monitor/cpu_monitor.py`
+- `MEMORY_THRESHOLD` in `monitor/memory_monitor.py`
+- `DISK_THRESHOLD` in `monitor/disk_monitor.py`
 
-Base framework for reliability and observability tools
+### Logging Configuration
 
-📌 Future Improvements
+Adjust logging settings in `logger_config.py`:
 
-Identify top resource-consuming processes
+- Log levels
+- File rotation policies
+- Log format
 
-Size-based log cleanup
+## Automated Maintenance
 
-Healthcheck integration
+### Log Cleanup
 
-Alerting (email / webhook)
+Run the log cleanup script:
 
-Metrics API endpoint
+```bash
+python auto_fix/cleanup_log.py
+```
 
-👤 Author
+### Service Restart
 
-Dipendra Singh Chandel Learning-focused project showcasing system monitoring and containerized deployment.
+Execute the service restart utility:
+
+```bash
+python auto_fix/restart_service.py
+```
+
+## Development
+
+### Adding New Monitors
+
+1. Create a new monitor file in the `monitor/` directory
+2. Implement the monitoring function following the pattern:
+
+```python
+def monitor_[resource](stop_event):
+    while not stop_event.is_set():
+        # Monitoring logic
+        # Logging
+        time.sleep(interval)
+```
+
+3. Import and add the monitor thread in `main.py`
+
+### Adding New Sensors
+
+1. Create sensor simulator in the `sensors/` directory
+2. Implement sensor health checks and data simulation
+3. Integrate with the main monitoring loop if needed
+
+## Dependencies
+
+- `psutil==7.1.3`: System and process utilities for monitoring
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For issues and questions, please open an issue on the GitHub repository.
